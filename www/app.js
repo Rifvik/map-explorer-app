@@ -233,34 +233,32 @@
     fogCtx.fillStyle = 'rgba(255, 255, 255, 0.42)';
     fogCtx.fillRect(0, 0, width, height);
 
-    // 2. Cut Out Explored Circles from White Fog Shroud
+    if (exploredPoints.length === 0) {
+      updateCoverageStats();
+      return;
+    }
+
+    // 2. Build Single Combined Path of All Explored Circles
+    fogCtx.beginPath();
+    for (let pt of exploredPoints) {
+      const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
+      const centerLatLng = map.containerPointToLatLng(containerPt);
+      const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
+      const pixelRadius = Math.max(34, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
+
+      fogCtx.moveTo(containerPt.x + pixelRadius, containerPt.y);
+      fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
+    }
+
+    // 3. Cut Out Combined Explored Shape from White Fog
     fogCtx.globalCompositeOperation = 'destination-out';
+    fogCtx.fillStyle = '#ffffff';
+    fogCtx.fill();
 
-    for (let pt of exploredPoints) {
-      const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
-      const centerLatLng = map.containerPointToLatLng(containerPt);
-      const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
-      const pixelRadius = Math.max(34, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
-
-      fogCtx.beginPath();
-      fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
-      fogCtx.fill();
-    }
-
-    // 3. Fill Explored Circles with Vibrant Light Green Tint (#4ade80)
+    // 4. Fill Entire Combined Explored Area with Single Uniform Light Green Tint (No Overlapping Artifacts)
     fogCtx.globalCompositeOperation = 'source-over';
-    fogCtx.fillStyle = 'rgba(74, 222, 128, 0.45)'; // Soft Light Green tint
-
-    for (let pt of exploredPoints) {
-      const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
-      const centerLatLng = map.containerPointToLatLng(containerPt);
-      const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
-      const pixelRadius = Math.max(34, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
-
-      fogCtx.beginPath();
-      fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
-      fogCtx.fill();
-    }
+    fogCtx.fillStyle = 'rgba(74, 222, 128, 0.45)';
+    fogCtx.fill();
 
     updateCoverageStats();
   }
