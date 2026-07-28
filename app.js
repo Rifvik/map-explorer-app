@@ -163,8 +163,8 @@
       zoomControl: false
     });
 
-    // Dark Map Tiles URL (CartoDB Dark Matter with OSM fallback)
-    const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    // Light Cartographic Map Tiles URL (CartoDB Voyager: Water, Park, Road, Urban colors)
+    const tileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
     const offlineLayer = new OfflineTileLayer(tileUrl, {
       maxZoom: 18,
       subdomains: 'abcd',
@@ -204,9 +204,9 @@
     if (!userMarker) {
       const userIcon = L.divIcon({
         className: 'user-location-marker',
-        html: '<div style="width:16px;height:16px;background:#FDF4AF;border:3px solid #34908B;border-radius:50%;box-shadow:0 0 12px #A5E9DD;"></div>',
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
+        html: '<div style="width:18px;height:18px;background:#0284c7;border:3px solid #ffffff;border-radius:50%;box-shadow:0 0 14px #FAD6A5;"></div>',
+        iconSize: [18, 18],
+        iconAnchor: [9, 9]
       });
       userMarker = L.marker([pos.lat, pos.lng], { icon: userIcon }).addTo(map);
     } else {
@@ -228,22 +228,20 @@
     const width = fogCanvas.width;
     const height = fogCanvas.height;
 
-    // 1. Draw Full Dark Fog Shroud
+    // 1. Draw Full Dark Grey Unexplored Fog Shroud (#1e293b)
     fogCtx.clearRect(0, 0, width, height);
-    fogCtx.fillStyle = 'rgba(18, 46, 44, 0.88)';
+    fogCtx.fillStyle = 'rgba(30, 41, 59, 0.95)';
     fogCtx.fillRect(0, 0, width, height);
 
-    // 2. Cut Out Holes Around Explored GPS Coordinates using destination-out
+    // 2. Cut Out Explored Holes (Reveals white/light map beneath)
     fogCtx.globalCompositeOperation = 'destination-out';
 
     for (let pt of exploredPoints) {
       const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
       
-      // Calculate pixel radius corresponding to REVEAL_RADIUS_METERS at current zoom
       const centerLatLng = map.containerPointToLatLng(containerPt);
-      const edgeLatLng = L.GeometryUtil ? L.GeometryUtil.destination(centerLatLng, 90, REVEAL_RADIUS_METERS) : centerLatLng;
       const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
-      const pixelRadius = Math.max(30, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
+      const pixelRadius = Math.max(32, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
 
       fogCtx.beginPath();
       fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
