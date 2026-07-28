@@ -228,27 +228,40 @@
     const width = fogCanvas.width;
     const height = fogCanvas.height;
 
-    // 1. Draw Full Dark Grey Unexplored Fog Shroud (#1e293b)
+    // 1. Draw Full Solid WHITE Unexplored Fog Mask (#ffffff)
     fogCtx.clearRect(0, 0, width, height);
-    fogCtx.fillStyle = 'rgba(30, 41, 59, 0.95)';
+    fogCtx.fillStyle = '#ffffff';
     fogCtx.fillRect(0, 0, width, height);
 
-    // 2. Cut Out Explored Holes (Reveals white/light map beneath)
+    // 2. Cut Out Explored Circles from White Fog Shroud
     fogCtx.globalCompositeOperation = 'destination-out';
 
     for (let pt of exploredPoints) {
       const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
-      
       const centerLatLng = map.containerPointToLatLng(containerPt);
       const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
-      const pixelRadius = Math.max(32, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
+      const pixelRadius = Math.max(34, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
 
       fogCtx.beginPath();
       fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
       fogCtx.fill();
     }
 
+    // 3. Fill Explored Circles with Vibrant Light Green Tint (#4ade80)
     fogCtx.globalCompositeOperation = 'source-over';
+    fogCtx.fillStyle = 'rgba(74, 222, 128, 0.45)'; // Soft Light Green tint
+
+    for (let pt of exploredPoints) {
+      const containerPt = map.latLngToContainerPoint([pt.lat, pt.lng]);
+      const centerLatLng = map.containerPointToLatLng(containerPt);
+      const edgePt = map.latLngToContainerPoint([centerLatLng.lat, centerLatLng.lng + 0.0008]);
+      const pixelRadius = Math.max(34, Math.hypot(edgePt.x - containerPt.x, edgePt.y - containerPt.y));
+
+      fogCtx.beginPath();
+      fogCtx.arc(containerPt.x, containerPt.y, pixelRadius, 0, Math.PI * 2);
+      fogCtx.fill();
+    }
+
     updateCoverageStats();
   }
 
