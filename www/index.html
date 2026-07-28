@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Map Explorer - Offline Fog of War Tracker</title>
+  <meta name="description" content="Android offline map explorer with tile downloading, GPS tracking, fog-of-war terrain discovery, and exploration percentage calculation.">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- PWA Manifest & Mobile Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Floating Header Bar -->
+    <header class="app-header glass">
+      <div class="header-left">
+        <div class="app-badge">🗺️ MAP EXPLORER</div>
+      </div>
+      <div class="header-right">
+        <div id="onlineBadge" class="status-badge online">
+          <span class="status-dot"></span> <span id="onlineText">ONLINE</span>
+        </div>
+        <button id="gpsBtn" class="icon-btn" title="Center GPS Location">
+          <span>🎯</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Map Container & Canvas Overlay -->
+    <main class="map-wrapper">
+      <div id="map"></div>
+      <canvas id="fogCanvas"></canvas>
+
+      <!-- Selection Bounding Box Overlay Guide (Visible during area download mode) -->
+      <div id="downloadGuide" class="download-guide hidden">
+        <div class="guide-banner">
+          <span>MOVE & ZOOM MAP TO SELECT REGION TO DOWNLOAD</span>
+          <button id="confirmDownloadBtn" class="action-btn primary-glow">DOWNLOAD REGION 📥</button>
+          <button id="cancelDownloadBtn" class="action-btn secondary">CANCEL</button>
+        </div>
+      </div>
+
+      <!-- Download Progress Modal -->
+      <div id="progressModal" class="modal-overlay hidden">
+        <div class="modal-card glass">
+          <h3>Downloading Offline Map Tiles</h3>
+          <p id="progressSub">Caching tiles to local storage...</p>
+          <div class="progress-bar-container">
+            <div id="progressBar" class="progress-bar" style="width: 0%;"></div>
+          </div>
+          <div id="progressText" class="progress-text">0 / 0 Tiles (0%)</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Sheet Dashboard -->
+    <footer class="bottom-sheet glass">
+      <div class="sheet-handle"></div>
+      
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">EXPLORED</span>
+          <span id="coveragePercent" class="stat-value highlight">0.0%</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">TARGET AREA</span>
+          <span id="targetAreaSize" class="stat-value">Not Selected</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">CACHED TILES</span>
+          <span id="cachedTileCount" class="stat-value">0 Tiles</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="actions-grid">
+        <button id="trackGpsBtn" class="btn primary-glow">
+          <span id="trackIcon">📍</span> <span id="trackLabel">START TRACKING</span>
+        </button>
+        <button id="downloadAreaModeBtn" class="btn secondary">
+          <span>📥</span> DOWNLOAD MAP
+        </button>
+        <button id="simGpsBtn" class="btn accent">
+          <span>🎮</span> GPS SIMULATOR
+        </button>
+        <button id="clearDataBtn" class="btn danger">
+          <span>🗑️</span> RESET FOG
+        </button>
+      </div>
+
+      <!-- Simulator Notice Bar (Shown when simulator active) -->
+      <div id="simNotice" class="sim-notice hidden">
+        <span>🎮 Simulator Active: Click anywhere on map to walk there</span>
+        <button id="stopSimBtn" class="text-btn">STOP</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Main Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

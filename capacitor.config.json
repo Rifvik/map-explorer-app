@@ -1,8 +1,7 @@
 {
   "appId": "com.mapexplorer.offline",
   "appName": "Map Explorer",
-  "webDir": ".",
-  "bundledWebRuntime": false,
+  "webDir": "www",
   "server": {
     "androidScheme": "https"
   },
