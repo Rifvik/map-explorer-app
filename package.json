@@ -1,0 +1,19 @@
+{
+  "name": "map-explorer-app",
+  "version": "1.0.0",
+  "description": "Android Offline Map Explorer with Fog of War Discovery Tracking",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "cap:add": "cap add android",
+    "cap:sync": "cap sync",
+    "cap:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}

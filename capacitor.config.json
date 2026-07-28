@@ -1,0 +1,14 @@
+{
+  "appId": "com.mapexplorer.offline",
+  "appName": "Map Explorer",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}
