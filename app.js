@@ -228,9 +228,9 @@
     const width = fogCanvas.width;
     const height = fogCanvas.height;
 
-    // 1. Draw Full Transparent WHITE Unexplored Fog Mask
+    // 1. Draw Full Soft Transparent WHITE Unexplored Fog Mask
     fogCtx.clearRect(0, 0, width, height);
-    fogCtx.fillStyle = 'rgba(255, 255, 255, 0.82)';
+    fogCtx.fillStyle = 'rgba(255, 255, 255, 0.42)';
     fogCtx.fillRect(0, 0, width, height);
 
     // 2. Cut Out Explored Circles from White Fog Shroud
