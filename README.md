@@ -12,7 +12,7 @@ An Android-compatible offline map application featuring online map tile download
    - Navigate and render the entire downloaded area when **100% offline**.
 
 2. **Fog of War Terrain Discovery**:
-   - Unexplored map regions are covered in a dark fog overlay.
+   - Unexplored map regions are covered in a white fog overlay.
    - As you move around with GPS active, a circular radius (65m) clears out fog in real-time.
 
 3. **Exploration Percentage Calculation**:
@@ -30,9 +30,9 @@ An Android-compatible offline map application featuring online map tile download
 ## 📱 How to Run & Test
 
 ### Option 1: Run Web Version
-Run in PowerShell:
+Run in terminal:
 ```powershell
-cd C:\Users\ritga\.gemini\antigravity\scratch\map-explorer-app
+cd map-explorer-app
 python -m http.server 8000
 ```
 Open **[http://localhost:8000](http://localhost:8000)** in your browser.
@@ -44,7 +44,7 @@ Open **[http://localhost:8000](http://localhost:8000)** in your browser.
 
 ### Option 3: Build Android APK with Capacitor CLI
 ```powershell
-cd C:\Users\ritga\.gemini\antigravity\scratch\map-explorer-app
+cd map-explorer-app
 npm install @capacitor/core @capacitor/cli @capacitor/android
 npx cap add android
 npx cap open android
